@@ -17,6 +17,7 @@
             app:cardCornerRadius="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:cardElevation="5dp"
             tools:ignore="MissingConstraints">
 
             <Button
@@ -38,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
-            android:text="오늘의 공부시간\n\n"
+            android:text="오늘의 순 공부시간\n\n"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
