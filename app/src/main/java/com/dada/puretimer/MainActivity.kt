@@ -107,6 +107,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.resetButton.setOnClickListener {
+
             /*Toast.makeText(this, "해당과목의 기록이 초기화됩니다", Toast.LENGTH_SHORT).show()*/
             resetTimer()
         }
