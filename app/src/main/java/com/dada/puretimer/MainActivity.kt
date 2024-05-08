@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.dada.puretimer.databinding.ActivityMainBinding
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.concurrent.timer
 
@@ -27,6 +29,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var subArray: MutableList<String>
     private lateinit var sharedPref: SharedPreferences
 
+    private fun enablePersistence() {
+        // 오프라인에서도 데이터저장 가능하게 함
+        Firebase.database.setPersistenceEnabled(true)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         val savedColors =
             sharedPref.getStringSet("colorArray", HashSet<String>())?.toList() ?: emptyList()
         subArray = savedColors.toMutableList()
+
 
         binding.changeButton.setOnClickListener {
             val builder = AlertDialog.Builder(this)
@@ -110,6 +118,8 @@ class MainActivity : AppCompatActivity() {
 
             /*Toast.makeText(this, "해당과목의 기록이 초기화됩니다", Toast.LENGTH_SHORT).show()*/
             resetTimer()
+
+
         }
         binding.startButton.setOnClickListener {
             if (buttonPressCount == 0) {
@@ -123,6 +133,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
         binding.scoreButton.setOnClickListener {
+
+            val sub_list=binding.subText.text.toString()
+            val time_list=binding.timeView.text.toString()
+
+            val database = Firebase.database
+            val myRef = database.getReference("timeList")
+
+            val model=DataModel(sub_list,time_list)
+            myRef.push().setValue(model)
+
             val intent = Intent(this, ScoreActivity::class.java)
             startActivity(intent)
         }

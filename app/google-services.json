@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "844695603269",
+    "project_id": "puretimer-f5f40",
+    "storage_bucket": "puretimer-f5f40.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844695603269:android:e39862cbab9cdc956d3b2c",
+        "android_client_info": {
+          "package_name": "com.dada.puretimer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAaGu7kNKv46l0NXshcCxkif9I_2ptRqHI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
