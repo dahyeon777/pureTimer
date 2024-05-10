@@ -3,16 +3,13 @@ package com.dada.puretimer
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.databinding.DataBindingUtil
 import com.dada.puretimer.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-
 
 class LoginActivity : AppCompatActivity() {
 
@@ -23,11 +20,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+
         auth= Firebase.auth
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
-        binding.joinBtn.setOnClickListener {
+        /*binding.loginOkBtn.setOnClickListener {
 
             val email = binding.emailArea.text.toString()
             val password=binding.passwordArea.text.toString()
@@ -43,8 +41,8 @@ class LoginActivity : AppCompatActivity() {
                         Toast.makeText(this, "계정이 이미 존재합니다.", Toast.LENGTH_LONG).show()
                     }
                 }
-        }
-        binding.loginBtn.setOnClickListener {
+        }*/
+        binding.loginOkBtn.setOnClickListener {
 
             val email = binding.emailArea.text.toString()
             val password=binding.passwordArea.text.toString()

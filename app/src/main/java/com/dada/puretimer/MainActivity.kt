@@ -29,8 +29,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var subArray: MutableList<String>
     private lateinit var sharedPref: SharedPreferences
 
+    // 오프라인에서도 데이터저장 가능하게 함
     private fun enablePersistence() {
-        // 오프라인에서도 데이터저장 가능하게 함
         Firebase.database.setPersistenceEnabled(true)
     }
 

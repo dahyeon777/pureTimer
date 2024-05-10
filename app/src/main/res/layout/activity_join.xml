@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout>
     <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".LoginActivity">
+        tools:context=".JoinActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:background="@color/mainColor"
-            android:layout_height="150dp">
+            android:layout_height="150dp"
+            android:background="@color/mainColor">
 
             <TextView
-                android:text="로그인"
+                android:text="회원가입"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:textSize="20sp"
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textColor="#000000"/>
+
         </LinearLayout>
 
         <LinearLayout
@@ -30,7 +32,7 @@
             android:layout_marginTop="50dp">
 
             <EditText
-                android:id="@+id/emailArea"
+                android:id="@+id/joinEmailArea"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:hint="email"
@@ -44,7 +46,7 @@
                 android:layout_height="0.5dp"/>
 
             <EditText
-                android:id="@+id/passwordArea"
+                android:id="@+id/passwordEmailArea"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:inputType="textPassword"
@@ -58,15 +60,30 @@
                 android:layout_marginLeft="10dp"
                 android:layout_height="0.5dp"/>
 
-            <Button
-                android:id="@+id/loginOkBtn"
+            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:inputType="textPassword"
+                android:hint="password check"
+                style="@style/AuthEditText" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:background="#999999"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_height="0.5dp"/>
+
+            <Button
+                android:id="@+id/joinOkBtn"
                 android:layout_margin="20dp"
+                android:text="회원가입"
                 android:background="@drawable/background_radius_y"
-                android:text="로그인하기" />
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
 
         </LinearLayout>
+
 
     </LinearLayout>
 </layout>
