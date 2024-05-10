@@ -1,12 +1,16 @@
 package com.dada.puretimer
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.dada.puretimer.databinding.ActivityJoinBinding
 import com.dada.puretimer.databinding.ActivityLoginBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -33,6 +37,7 @@ class JoinActivity : AppCompatActivity() {
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(this, "회원가입에 성공했습니다.", Toast.LENGTH_LONG).show()
+                            startActivity(Intent(this, LoginActivity::class.java))
                         } else if (task.exception?.message.isNullOrEmpty()) {
                             Toast.makeText(this, "회원가입에 실패했습니다.", Toast.LENGTH_LONG).show()
                         } else {
@@ -45,4 +50,5 @@ class JoinActivity : AppCompatActivity() {
             }
         }
     }
+
 }

@@ -3,6 +3,8 @@ package com.dada.puretimer
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.dada.puretimer.databinding.ActivityLoginBinding
@@ -52,8 +54,13 @@ class LoginActivity : AppCompatActivity() {
         auth?.signInWithEmailAndPassword(email, password)
             ?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    //로그인에 성공한 경우 메인 화면으로 이동
-                    goToMainActivity(task.result?.user)
+                    Toast.makeText(this, "로그인 성공!", Toast.LENGTH_SHORT).show()
+
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        //로그인에 성공한 경우 메인 화면으로 이동
+                        goToMainActivity(task.result?.user)
+                    }, 1000)
+
                 } else {
                     //로그인에 실패한 경우 Toast 메시지로 에러를 띄워준다
                     Toast.makeText(this, "아이디,비밀번호가 다릅니다.", Toast.LENGTH_LONG).show()

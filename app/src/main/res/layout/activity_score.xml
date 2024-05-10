@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFE0A5"
+        android:background="@drawable/gradient"
         tools:context=".ScoreActivity">
 
         <androidx.cardview.widget.CardView
