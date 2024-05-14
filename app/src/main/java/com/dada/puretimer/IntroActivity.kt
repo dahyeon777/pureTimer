@@ -9,27 +9,34 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Gravity
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.dada.puretimer.databinding.ActivityIntroBinding
-import com.google.firebase.auth.FirebaseUser
-import kotlin.system.exitProcess
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class IntroActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityIntroBinding
+    private lateinit var auth: FirebaseAuth
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if(!isNetworkAvailable(this)){
+        /*if(!isNetworkAvailable(this)){
             val toast = Toast.makeText(this, "Wifi를 켜주세요.", Toast.LENGTH_LONG)
             toast.setGravity(Gravity.CENTER, Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL)
             toast.show()
 
-        }
-
+        }*/
+        auth = Firebase.auth
         binding = DataBindingUtil.setContentView(this, R.layout.activity_intro)
+
+        if (auth.currentUser != null) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
 
         binding.loginBtn.setOnClickListener {
             val intent = Intent(this,LoginActivity::class.java)
@@ -42,12 +49,23 @@ class IntroActivity : AppCompatActivity() {
         }
 
         binding.anonyBtn.setOnClickListener {
-            val intent = Intent(this,AnonyLoginActivity::class.java)
-            startActivity(intent)
+            auth.signInAnonymously()
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Toast.makeText(this, "로그인에 성공!", Toast.LENGTH_LONG).show()
+                        val user = auth.currentUser
+                        val intent = Intent(this, MainActivity::class.java)
+                        intent.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(this, "로그인에 실패", Toast.LENGTH_LONG).show()
+                    }
+                }
         }
     }
-
-    private fun isNetworkAvailable(context: Context): Boolean {
+    /*private fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -66,6 +84,5 @@ class IntroActivity : AppCompatActivity() {
         } else {
             return connectivityManager.activeNetworkInfo?.isConnected ?: false
         }
-    }
-
+    }*/
 }

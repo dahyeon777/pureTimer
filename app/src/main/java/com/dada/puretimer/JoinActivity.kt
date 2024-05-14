@@ -36,10 +36,10 @@ class JoinActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(this, "회원가입에 성공했습니다.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, "회원가입 성공!", Toast.LENGTH_LONG).show()
                             startActivity(Intent(this, LoginActivity::class.java))
                         } else if (task.exception?.message.isNullOrEmpty()) {
-                            Toast.makeText(this, "회원가입에 실패했습니다.", Toast.LENGTH_LONG).show()
+                            Toast.makeText(this, "회원가입에 실패", Toast.LENGTH_LONG).show()
                         } else {
                             //입력한 계정 정보가 이미 Firebase DB에 있는 경우
                             Toast.makeText(this, "계정이 이미 존재합니다.", Toast.LENGTH_LONG).show()
