@@ -13,6 +13,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.dada.puretimer.databinding.ActivityMainBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -24,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private var time = 0
     private var timerTask: Timer? = null
     private var buttonPressCount = 0
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
 
     private lateinit var subArray: MutableList<String>
@@ -37,8 +42,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        auth = Firebase.auth
+        database = Firebase.database.reference
 
         sharedPref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
@@ -137,14 +144,15 @@ class MainActivity : AppCompatActivity() {
             val sub_list=binding.subText.text.toString()
             val time_list=binding.timeView.text.toString()
 
-            val database = Firebase.database
-            val myRef = database.getReference("timeList")
-
+            /*val database = Firebase.database*/
+            /*val myRef = database.getReference("사용자이름")*/
             val model=DataModel(sub_list,time_list)
-            myRef.push().setValue(model)
-
+            val myRef = database.child("users").child("유저이름123")
+                .child("과목,시간기록").push().setValue(model)
+            /*myRef.push().setValue(model)*/
             val intent = Intent(this, ScoreActivity::class.java)
             startActivity(intent)
+
         }
     }
 
