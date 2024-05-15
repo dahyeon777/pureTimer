@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +30,9 @@ class ScoreActivity : AppCompatActivity() {
         auth = Firebase.auth
         database = Firebase.database.reference
 
+        val user = FirebaseAuth.getInstance().currentUser // 로그인한 유저의 정보 가져오기
+        val uid = user?.uid // 로그인한 유저의 고유 uid 가져오기
+
         binding.homeButton.setOnClickListener {
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
@@ -40,8 +42,10 @@ class ScoreActivity : AppCompatActivity() {
         val itemList = ArrayList<BoardItem>()
 
         val database = FirebaseDatabase.getInstance()
-        val myRef = database.getReference("users").child("유저이름123")
-            .child("과목,시간기록")
+        val myRef = uid?.let {
+            database.getReference("users").child(it)
+                .child("과목,시간기록")
+        }
         val boardAdapter = BoardAdapter(itemList)
 
         val childEventListener = object : ChildEventListener {
@@ -49,12 +53,11 @@ class ScoreActivity : AppCompatActivity() {
                 val sub = dataSnapshot.child("sub").getValue(String::class.java)
                 val time = dataSnapshot.child("time").getValue(String::class.java)
                 if (sub != null && time != null) {
-                    Log.d("subtime5", "데이터 들어오긴 함")
                     val boardItem = BoardItem(sub, time)
                     itemList.add(boardItem)
                     boardAdapter.notifyDataSetChanged() // 어댑터에 변경 알림
                 } else {
-                    Log.d("subtime2", "데이터 안들어옴")
+                    Log.d("subtime", "데이터 안들어옴")
                 }
             }
 
@@ -78,52 +81,9 @@ class ScoreActivity : AppCompatActivity() {
             }
         }
 
-// ChildEventListener를 데이터베이스 참조에 연결
-        myRef.addChildEventListener(childEventListener)
-
-
-
-       /* // 데이터를 한 번만 읽어오는 경우
-        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (userSnapshot in dataSnapshot.children) {
-                    for (recordSnapshot in userSnapshot.child("과목,시간기록").children) {
-                        val sub1 = recordSnapshot.child("sub").getValue(String::class.java)
-                        val time1 = recordSnapshot.child("time").getValue(String::class.java)
-                        if (sub1 != null && time1 != null) {
-                            Log.d("subtime5", "데이터 들어오긴 함")
-                            // DataModel 객체 생성
-                            val dataModel = DataModel(sub1, time1)
-                            // DataModel 객체에서 필요한 정보를 추출하여 BoardItem 객체 생성
-                            itemList.add(BoardItem("수학","13:00"))
-                            val boardItem = BoardItem(dataModel.sub, dataModel.time)
-                            itemList.add(boardItem)
-                        }
-                        else{
-                            Log.d("subtime2", "데이터 안들어옴")
-                        }
-                    }
-                }
-                for (item in itemList) {
-                    Log.d("subtime", "Subject: ${item.sub}, Time: ${item.time}")
-                }
-
-                // 데이터 변경 후에 어댑터 설정
-                val boardAdapter = BoardAdapter(itemList)
-                rv_board.adapter = boardAdapter
-                rv_board.layoutManager = LinearLayoutManager(this@ScoreActivity, LinearLayoutManager.VERTICAL, false)
-                boardAdapter.notifyDataSetChanged()
-            }
-
-
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                itemList.add(BoardItem("영어","13:00"))
-                // 데이터 읽기를 취소했거나 실패한 경우의 처리
-                Log.e("sumtime3", "Database operation canceled: ${databaseError.message}")
-            }
-        })
-*/
+        if (myRef != null) {
+            myRef.addChildEventListener(childEventListener)
+        }
 
         rv_board.adapter = boardAdapter
         rv_board.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)

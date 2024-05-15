@@ -4,22 +4,23 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.dada.puretimer.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.util.*
 import kotlin.concurrent.timer
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -46,6 +47,12 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         auth = Firebase.auth
         database = Firebase.database.reference
+
+        val user = FirebaseAuth.getInstance().currentUser // 로그인한 유저의 정보 가져오기
+        val uid = user?.uid // 로그인한 유저의 고유 uid 가져오기
+        Toast.makeText(this,uid,Toast.LENGTH_SHORT).show()
+
+
 
         sharedPref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
@@ -123,9 +130,17 @@ class MainActivity : AppCompatActivity() {
 
         binding.resetButton.setOnClickListener {
 
-            /*Toast.makeText(this, "해당과목의 기록이 초기화됩니다", Toast.LENGTH_SHORT).show()*/
-            resetTimer()
-
+            // 다이얼로그 표시
+            showYesNoDialog(context = this,
+                message = "해당과목의 오늘 시간이 모두 초기화됩니다!",
+                onYesClicked = {
+                    // '예' 버튼을 클릭했을 때 수행할 동작
+                    // 예를 선택했을 때 수행할 작업을 여기에 작성
+                },
+                onNoClicked = {
+                    // '아니오' 버튼을 클릭했을 때 수행할 동작
+                    // 아니오를 선택했을 때 수행할 작업을 여기에 작성
+                })
 
         }
         binding.startButton.setOnClickListener {
@@ -137,18 +152,21 @@ class MainActivity : AppCompatActivity() {
                 stopTimer()
                 binding.startButton.setText("START!")
                 buttonPressCount = 0 // 정지 상태로 변경
+
+                val sub_list=binding.subText.text.toString()
+                val time_list=binding.timeView.text.toString()
+
+                /*val database = Firebase.database*/
+                /*val myRef = database.getReference("사용자이름")*/
+                val model=DataModel(sub_list,time_list)
+                val myRef = uid?.let { it1 ->
+                    database.child("users").child(it1)
+                        .child("과목,시간기록").push().setValue(model)
+                }
             }
         }
         binding.scoreButton.setOnClickListener {
 
-            val sub_list=binding.subText.text.toString()
-            val time_list=binding.timeView.text.toString()
-
-            /*val database = Firebase.database*/
-            /*val myRef = database.getReference("사용자이름")*/
-            val model=DataModel(sub_list,time_list)
-            val myRef = database.child("users").child("유저이름123")
-                .child("과목,시간기록").push().setValue(model)
             /*myRef.push().setValue(model)*/
             val intent = Intent(this, ScoreActivity::class.java)
             startActivity(intent)
@@ -177,6 +195,25 @@ class MainActivity : AppCompatActivity() {
 
         time=0
         binding.timeView?.text="00:00"
+    }
+
+    fun showYesNoDialog(context: Context, message: String, onYesClicked: () -> Unit, onNoClicked: () -> Unit) {
+        val builder = AlertDialog.Builder(context)
+        builder.setMessage(message)
+            .setCancelable(false)
+            .setPositiveButton("예") { dialog, id ->
+                // '예' 버튼이 클릭되었을 때 수행할 동작
+                resetTimer()
+                onYesClicked()
+                dialog.dismiss()
+            }
+            .setNegativeButton("아니오") { dialog, id ->
+                // '아니오' 버튼이 클릭되었을 때 수행할 동작
+                onNoClicked()
+                dialog.dismiss()
+            }
+        val alert = builder.create()
+        alert.show()
     }
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 }
