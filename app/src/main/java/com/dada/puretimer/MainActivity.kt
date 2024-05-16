@@ -54,6 +54,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         sharedPref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
         // 저장된 데이터를 로드합니다.

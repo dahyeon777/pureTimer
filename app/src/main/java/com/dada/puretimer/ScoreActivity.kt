@@ -20,6 +20,7 @@ class ScoreActivity : AppCompatActivity() {
     private lateinit var binding: ActivityScoreBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
+    private lateinit var databaseReference: DatabaseReference
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +33,15 @@ class ScoreActivity : AppCompatActivity() {
 
         val user = FirebaseAuth.getInstance().currentUser // 로그인한 유저의 정보 가져오기
         val uid = user?.uid // 로그인한 유저의 고유 uid 가져오기
+        databaseReference = uid?.let { FirebaseDatabase.getInstance().reference.child(it) }!!
+
 
         binding.homeButton.setOnClickListener {
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
         }
+
+
         val rv_board = findViewById<RecyclerView>(R.id.rv)
 
         val itemList = ArrayList<BoardItem>()
@@ -48,12 +53,18 @@ class ScoreActivity : AppCompatActivity() {
         val boardAdapter = BoardAdapter(itemList)
 
         val childEventListener = object : ChildEventListener {
+            var totalTime = 0
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 val sub = dataSnapshot.child("sub").getValue(String::class.java)
                 val time = dataSnapshot.child("time").getValue(String::class.java)
                 if (sub != null && time != null) {
                     val boardItem = BoardItem(sub, time)
                     itemList.add(boardItem)
+                    val parts = time.split(":")
+                    val minutes = parts[0].toInt()
+                    val seconds = parts[1].toInt()
+                    totalTime += minutes * 60 + seconds
+                    binding.totalTime.text = formatTime(totalTime)
                     boardAdapter.notifyDataSetChanged() // 어댑터에 변경 알림
                 } else {
                     Log.d("subtime", "데이터 안들어옴")
@@ -89,4 +100,10 @@ class ScoreActivity : AppCompatActivity() {
         boardAdapter.notifyDataSetChanged()
 
     }
+    private fun formatTime(totalTimeInSeconds: Int): String {
+        val minutes = totalTimeInSeconds / 60
+        val seconds = totalTimeInSeconds % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
 }
