@@ -156,17 +156,58 @@ class MainActivity : AppCompatActivity() {
                 binding.startButton.setText("START!")
                 buttonPressCount = 0 // 정지 상태로 변경
 
-                val sub_list=binding.subText.text.toString()
-                val time_list=binding.timeView.text.toString()
+                val sub = binding.subText.text.toString()
+                val time = binding.timeView.text.toString()
 
-                /*val database = Firebase.database*/
-                /*val myRef = database.getReference("사용자이름")*/
-                val model=DataModel(sub_list,time_list)
                 val myRef = uid?.let { it1 ->
-                    database.child("users").child(it1).push().setValue(model)
+                    database.child("users").child(it1)
+                }
+
+                // ValueEventListener를 통해 데이터베이스의 변경사항을 감지하고 처리합니다.
+                if (myRef != null) {
+                    myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            var isSubExist = false
+                            for (userSnapshot in dataSnapshot.children) {
+                                val existingSub = userSnapshot.child("sub").getValue(String::class.java)
+                                if (existingSub == sub) {
+                                    // 기존에 동일한 과목이 존재하면 해당 시간을 더합니다.
+                                    var existingTime = userSnapshot.child("time").getValue(String::class.java)
+                                    val partsExisting = existingTime?.split(":")
+                                    val existingMinutes = partsExisting?.get(0)?.toInt()
+                                    val existingSeconds = partsExisting?.get(1)?.toInt()
+
+                                    val partsNew = time.split(":")
+                                    val newMinutes = partsNew[0].toInt()
+                                    val newSeconds = partsNew[1].toInt()
+
+                                    // 시간을 더합니다.
+                                    val totalMinutes = existingMinutes?.plus(newMinutes)
+                                    val totalSeconds = existingSeconds?.plus(newSeconds)
+                                    existingTime = String.format("%02d:%02d", totalMinutes, totalSeconds)
+
+                                    // 데이터베이스에 수정된 시간을 업데이트합니다.
+                                    userSnapshot.ref.child("time").setValue(existingTime)
+                                    isSubExist = true
+                                    break
+                                }
+                            }
+
+                            // 만약 해당 과목이 존재하지 않으면 새로 추가합니다.
+                            if (!isSubExist) {
+                                val model = DataModel(sub, time)
+                                myRef.push().setValue(model)
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            // 에러 발생 시 처리할 내용을 작성합니다.
+                        }
+                    })
                 }
             }
         }
+
         binding.scoreButton.setOnClickListener {
 
             /*myRef.push().setValue(model)*/
