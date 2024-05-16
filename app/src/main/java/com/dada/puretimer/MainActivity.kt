@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Toast
@@ -14,8 +15,7 @@ import androidx.databinding.DataBindingUtil
 import com.dada.puretimer.databinding.ActivityMainBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.util.*
@@ -68,8 +68,10 @@ class MainActivity : AppCompatActivity() {
 
             builder.setTitle("과목을 선택하세요.")
                 .setItems(subArray.toTypedArray()) { dialog, which ->
+                    /*childEventListener*/
                     // 여기서 인자 'which'는 배열의 position을 나타냅니다.
                     binding.subText.text = subArray[which]
+                    resetTimer()//과목이 변경됨에 따라 시간 초기화
                 }
                 // "추가" 버튼 추가
                 .setPositiveButton("추가") { dialog, which ->
@@ -160,8 +162,7 @@ class MainActivity : AppCompatActivity() {
                 /*val myRef = database.getReference("사용자이름")*/
                 val model=DataModel(sub_list,time_list)
                 val myRef = uid?.let { it1 ->
-                    database.child("users").child(it1)
-                        .child("과목,시간기록").push().setValue(model)
+                    database.child("users").child(it1).push().setValue(model)
                 }
             }
         }
@@ -215,5 +216,32 @@ class MainActivity : AppCompatActivity() {
         val alert = builder.create()
         alert.show()
     }
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    /*val childEventListener = object : ChildEventListener {
+        override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+            val sub = dataSnapshot.child("sub").getValue(String::class.java)
+            if (sub != null) {
+                subArray.add(sub)
+            } else {
+            }
+        }
+
+        override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
+            // 데이터가 변경될 때 호출됩니다.
+            // 여기서 필요하면 해당 데이터 항목을 업데이트할 수 있습니다.
+        }
+
+        override fun onChildRemoved(dataSnapshot: DataSnapshot) {
+            // 데이터가 삭제될 때 호출됩니다.
+            // 여기서 필요하면 해당 데이터 항목을 삭제할 수 있습니다.
+        }
+
+        override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
+            // 데이터의 위치가 변경될 때 호출됩니다. (일반적으로 사용되지 않음)
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+            // 데이터 가져오기가 취소되었거나 실패한 경우의 처리
+            Log.e("sumtime3", "Database operation canceled: ${databaseError.message}")
+        }
+    }*/
 }

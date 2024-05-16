@@ -44,7 +44,6 @@ class ScoreActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance()
         val myRef = uid?.let {
             database.getReference("users").child(it)
-                .child("과목,시간기록")
         }
         val boardAdapter = BoardAdapter(itemList)
 
