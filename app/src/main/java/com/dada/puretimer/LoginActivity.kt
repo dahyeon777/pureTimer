@@ -51,7 +51,7 @@ class LoginActivity : AppCompatActivity() {
                             startActivity(intent)
 
                         } else {
-                            Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "아이디,비밀번호를 다시 확인해주세요", Toast.LENGTH_SHORT).show()
 
                         }
                     }

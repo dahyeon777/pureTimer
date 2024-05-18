@@ -22,13 +22,14 @@
 
             <Button
                 android:id="@+id/homeButton"
-                android:layout_width="100dp"
-                android:layout_height="43dp"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
                 android:background="#FFFFFF"
                 android:fontFamily="@font/bmjua_ttf"
                 android:gravity="center"
+                android:textColor="#FF757575"
                 android:text="홈"
-                android:textSize="15sp" />
+                android:textSize="20sp" />
 
         </androidx.cardview.widget.CardView>
 
@@ -37,10 +38,13 @@
             android:id="@+id/hap"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="50dp"
+            android:background="@color/white"
             android:gravity="center"
+            android:textColor="#FF757575"
             android:text="오늘의 순 공부시간"
             android:textSize="24sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView"
@@ -48,12 +52,14 @@
 
         <TextView
             android:id="@+id/totalTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#FFFFFF"
+            android:textColor="#FF757575"
             android:gravity="center"
+            android:textStyle="bold"
             android:text="00:00"
-            android:textSize="24sp"
+            android:textSize="28sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/hap" />

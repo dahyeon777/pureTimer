@@ -48,9 +48,13 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
         database = Firebase.database.reference
 
+
+
+
         val user = FirebaseAuth.getInstance().currentUser // 로그인한 유저의 정보 가져오기
         val uid = user?.uid // 로그인한 유저의 고유 uid 가져오기
         Toast.makeText(this,uid,Toast.LENGTH_SHORT).show()
+        var subChange = 0
 
 
 
@@ -63,15 +67,16 @@ class MainActivity : AppCompatActivity() {
         subArray = savedColors.toMutableList()
 
 
-        binding.changeButton.setOnClickListener {
+        binding.subTextBtn.setOnClickListener {
             val builder = AlertDialog.Builder(this)
             val input = EditText(this) // EditText를 생성
 
             builder.setTitle("과목을 선택하세요.")
                 .setItems(subArray.toTypedArray()) { dialog, which ->
-                    /*childEventListener*/
                     // 여기서 인자 'which'는 배열의 position을 나타냅니다.
-                    binding.subText.text = subArray[which]
+                    binding.subTextBtn.text = subArray[which]
+                    subChange=1
+
                     resetTimer()//과목이 변경됨에 따라 시간 초기화
                 }
                 // "추가" 버튼 추가
@@ -132,22 +137,49 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.resetButton.setOnClickListener {
-
             // 다이얼로그 표시
-            showYesNoDialog(context = this,
-                message = "해당과목의 오늘 시간이 모두 초기화됩니다!",
+            showYesNoDialog(
+                context = this,
+                message = "해당과목의 기록이 모두 삭제됩니다!",
                 onYesClicked = {
-                    // '예' 버튼을 클릭했을 때 수행할 동작
-                    // 예를 선택했을 때 수행할 작업을 여기에 작성
+                    val sub = binding.subTextBtn.text.toString()
+                    val myRef2 = uid?.let { it1 ->
+                        database.child("users").child(it1)
+                    }
+
+                    // ValueEventListener를 통해 데이터베이스의 변경사항을 감지하고 처리합니다.
+                    myRef2?.addListenerForSingleValueEvent(object : ValueEventListener {
+                        override fun onDataChange(dataSnapshot: DataSnapshot) {
+                            for (userSnapshot in dataSnapshot.children) {
+                                val existingSub = userSnapshot.child("sub").getValue(String::class.java)
+                                if (existingSub == sub) {
+                                    // 해당 sub의 시간을 00:00으로 초기화
+                                    userSnapshot.ref.child("time").setValue("00:00")
+                                    // 해당 과목(sub)을 데이터베이스에서 삭제
+                                    userSnapshot.ref.removeValue()
+                                    binding.subTextBtn.setText("과목을 변경하세요")
+                                    subChange=0
+                                    break
+                                }
+                            }
+                        }
+
+                        override fun onCancelled(databaseError: DatabaseError) {
+                            // 에러 발생 시 처리할 내용을 작성합니다.
+                        }
+                    })
                 },
                 onNoClicked = {
-                    // '아니오' 버튼을 클릭했을 때 수행할 동작
-                    // 아니오를 선택했을 때 수행할 작업을 여기에 작성
-                })
-
+                    // '아니오'를 선택했을 때 수행할 작업
+                }
+            )
         }
+
         binding.startButton.setOnClickListener {
-            if (buttonPressCount == 0) {
+            if(subChange == 0){
+                Toast.makeText(this,"과목을 변경해주세요",Toast.LENGTH_SHORT).show()
+            }
+            else if (buttonPressCount == 0) {
                 startTimer()
                 binding.startButton.setText("STOP!")
                 buttonPressCount = 1 // 시작 상태로 변경
@@ -156,7 +188,7 @@ class MainActivity : AppCompatActivity() {
                 binding.startButton.setText("START!")
                 buttonPressCount = 0 // 정지 상태로 변경
 
-                val sub = binding.subText.text.toString()
+                val sub = binding.subTextBtn.text.toString()
                 val time = binding.timeView.text.toString()
 
                 val myRef = uid?.let { it1 ->
@@ -219,7 +251,7 @@ class MainActivity : AppCompatActivity() {
 
     /////////////////////////////시계 타이머 구현/////////////////////////////////////////////////////////////
     private fun startTimer() {
-        timerTask = timer(period = 10) {
+        timerTask = timer(period = 9.99.toLong()) {
             time++
 
             val hour = time / (60 * 100) // 분을 시로 변환
@@ -258,32 +290,4 @@ class MainActivity : AppCompatActivity() {
         val alert = builder.create()
         alert.show()
     }
-    /*val childEventListener = object : ChildEventListener {
-        override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            val sub = dataSnapshot.child("sub").getValue(String::class.java)
-            if (sub != null) {
-                subArray.add(sub)
-            } else {
-            }
-        }
-
-        override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            // 데이터가 변경될 때 호출됩니다.
-            // 여기서 필요하면 해당 데이터 항목을 업데이트할 수 있습니다.
-        }
-
-        override fun onChildRemoved(dataSnapshot: DataSnapshot) {
-            // 데이터가 삭제될 때 호출됩니다.
-            // 여기서 필요하면 해당 데이터 항목을 삭제할 수 있습니다.
-        }
-
-        override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {
-            // 데이터의 위치가 변경될 때 호출됩니다. (일반적으로 사용되지 않음)
-        }
-
-        override fun onCancelled(databaseError: DatabaseError) {
-            // 데이터 가져오기가 취소되었거나 실패한 경우의 처리
-            Log.e("sumtime3", "Database operation canceled: ${databaseError.message}")
-        }
-    }*/
 }
