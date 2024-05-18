@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         val user = FirebaseAuth.getInstance().currentUser // 로그인한 유저의 정보 가져오기
         val uid = user?.uid // 로그인한 유저의 고유 uid 가져오기
-        Toast.makeText(this,uid,Toast.LENGTH_SHORT).show()
+        /*Toast.makeText(this,uid,Toast.LENGTH_SHORT).show()*/
         var subChange = 0
 
 

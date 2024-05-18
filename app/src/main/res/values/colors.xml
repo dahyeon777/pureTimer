@@ -10,4 +10,5 @@
     <color name="mainColor">#FCAA5D</color>
     <color name="middleColor">#FFF38A</color>
     <color name="startColor">#FFF38A</color>
+    <color name="textColor">#3d3d3d</color>
 </resources>
