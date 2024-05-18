@@ -7,8 +7,13 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
+import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import com.dada.puretimer.databinding.ActivityIntroBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -23,12 +28,10 @@ class IntroActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        /*if(!isNetworkAvailable(this)){
-            val toast = Toast.makeText(this, "Wifi를 켜주세요.", Toast.LENGTH_LONG)
-            toast.setGravity(Gravity.CENTER, Gravity.CENTER_HORIZONTAL, Gravity.CENTER_VERTICAL)
-            toast.show()
+        if(!isNetworkAvailable(this)){
+            showAlertDialog()
+        }
 
-        }*/
         auth = Firebase.auth
         binding = DataBindingUtil.setContentView(this, R.layout.activity_intro)
 
@@ -65,7 +68,7 @@ class IntroActivity : AppCompatActivity() {
                 }
         }
     }
-    /*private fun isNetworkAvailable(context: Context): Boolean {
+    private fun isNetworkAvailable(context: Context): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -84,5 +87,17 @@ class IntroActivity : AppCompatActivity() {
         } else {
             return connectivityManager.activeNetworkInfo?.isConnected ?: false
         }
-    }*/
+    }
+
+    private fun showAlertDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder
+            .setMessage("인터넷 연결을 확인해주세요.\n앱이 종료됩니다.")
+            .setPositiveButton("확인") { dialog, which ->
+                // 앱 종료
+                finish()
+            }
+            .setCancelable(false)
+            .show()
+    }
 }

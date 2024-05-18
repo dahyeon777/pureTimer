@@ -22,6 +22,11 @@ class ScoreActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
 
+    // 오프라인에서도 데이터저장 가능하게 함
+    private fun enablePersistence() {
+        Firebase.database.setPersistenceEnabled(true)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
