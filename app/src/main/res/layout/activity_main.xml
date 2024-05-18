@@ -25,7 +25,7 @@
         <TextView
             android:id="@+id/timeView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:fontFamily="@font/bmjua_ttf"
             android:gravity="center"
             android:text="00:00"
@@ -33,27 +33,25 @@
             android:textSize="70sp"
             app:layout_constraintBottom_toBottomOf="@+id/view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2"
             tools:ignore="MissingConstraints,NotSibling" />
 
         <Button
             android:id="@+id/subTextBtn"
-            android:layout_width="300dp"
+            android:layout_width="250dp"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:layout_marginBottom="8dp"
             android:layout_weight="2"
-            android:background="@drawable/allshape"
-            android:backgroundTint="#FFD5D6D6"
+            android:background="@drawable/line"
             android:fontFamily="@font/bmjua_ttf"
             android:gravity="center"
             android:text="과목을 변경하세요"
             android:textColor="@color/textColor"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/resetButton"
+            app:layout_constraintBottom_toTopOf="@+id/timeView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.cardview.widget.CardView
@@ -72,7 +70,7 @@
                 android:id="@+id/scoreButton"
                 android:layout_width="130dp"
                 android:layout_height="50dp"
-                android:background="#FFFFFF"
+                android:background="#FDF188"
                 android:fontFamily="@font/bmjua_ttf"
                 android:gravity="center"
                 android:text="기록보기"
@@ -94,24 +92,27 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeView" />
+            app:layout_constraintTop_toBottomOf="@+id/view" />
 
         <Button
             android:id="@+id/resetButton"
-            android:layout_width="300dp"
+            android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:layout_margin="5dp"
-            android:layout_marginBottom="24dp"
             android:layout_weight="1"
             android:background="@drawable/allshape"
-            android:backgroundTint="#FEF289"
+            android:backgroundTint="#65D4D5D5"
             android:fontFamily="@font/bmjua_ttf"
-            android:text="초기화"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="RESET"
             android:textColor="@color/textColor"
             android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/timeView"
+            app:layout_constraintBottom_toBottomOf="@+id/view"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timeView" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
