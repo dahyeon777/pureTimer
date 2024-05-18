@@ -147,8 +147,12 @@ class MainActivity : AppCompatActivity() {
             // 다이얼로그 표시
             showYesNoDialog(
                 context = this,
+
                 message = "해당과목의 기록이 모두 삭제됩니다.\n삭제하시겠습니까?",
                 onYesClicked = {
+                    if(subChange==0){
+                        Toast.makeText(this,"초기화 할 과목을 선택하세요",Toast.LENGTH_SHORT).show()
+                    }
                     val sub = binding.subTextBtn.text.toString()
                     val myRef2 = uid?.let { it1 ->
                         database.child("users").child(it1)
@@ -159,6 +163,7 @@ class MainActivity : AppCompatActivity() {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
                             for (userSnapshot in dataSnapshot.children) {
                                 val existingSub = userSnapshot.child("sub").getValue(String::class.java)
+
                                 if (existingSub == sub) {
                                     // 해당 sub의 시간을 00:00으로 초기화
                                     userSnapshot.ref.child("time").setValue("00:00")

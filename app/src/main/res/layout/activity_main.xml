@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="450dp"
             android:background="@drawable/shape"
-            android:backgroundTint="@color/white"
+            android:backgroundTint="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,24 +35,54 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
             tools:ignore="MissingConstraints,NotSibling" />
 
-        <Button
-            android:id="@+id/subTextBtn"
-            android:layout_width="250dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:layout_weight="2"
-            android:background="@drawable/line"
-            android:fontFamily="@font/bmjua_ttf"
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_marginTop="32dp"
             android:gravity="center"
-            android:text="과목을 변경하세요"
-            android:textColor="@color/textColor"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toTopOf="@+id/timeView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:orientation="horizontal"
+            android:weightSum="3"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="10dp">
+
+            <Button
+                android:id="@+id/subTextBtn"
+                android:layout_width="250dp"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_weight="2"
+                android:background="@drawable/line"
+                android:fontFamily="@font/bmjua_ttf"
+                android:gravity="center"
+                android:text="과목을 변경하세요"
+                android:textColor="@color/textColor"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/timeView"
+                app:layout_constraintEnd_toStartOf="@+id/resetButton"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/resetButton"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_margin="5dp"
+                android:layout_marginEnd="24dp"
+                android:layout_weight="1"
+                android:background="@drawable/allshape"
+                android:backgroundTint="#94CDCFCD"
+                android:fontFamily="@font/bmjua_ttf"
+                android:text="RESET"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/timeView"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </LinearLayout>
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
@@ -70,7 +100,7 @@
                 android:id="@+id/scoreButton"
                 android:layout_width="130dp"
                 android:layout_height="50dp"
-                android:background="#FDF188"
+                android:background="#FFFFFF"
                 android:fontFamily="@font/bmjua_ttf"
                 android:gravity="center"
                 android:text="기록보기"
@@ -87,32 +117,14 @@
             android:backgroundTint="@color/middleColor"
             android:fontFamily="@font/bmjua_ttf"
             android:text="START!"
-            android:textColor="@color/textColor"
-            android:textSize="50sp"
+            android:textColor="#3D3D3D"
+            android:textSize="70sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
-        <Button
-            android:id="@+id/resetButton"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:background="@drawable/allshape"
-            android:backgroundTint="#65D4D5D5"
-            android:fontFamily="@font/bmjua_ttf"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="RESET"
-            android:textColor="@color/textColor"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/view"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.95"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeView" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
