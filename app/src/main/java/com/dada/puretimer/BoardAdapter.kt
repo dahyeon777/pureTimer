@@ -16,7 +16,7 @@ class BoardAdapter(val itemList: ArrayList<BoardItem>) :
 
     override fun onBindViewHolder(holder: BoardViewHolder, position: Int) {
         holder.rvSub.text = itemList[position].sub
-        holder.rvTime.text = itemList[position].time
+        holder.rvTime.text = itemList[position].timeTotal
     }
 
     override fun getItemCount(): Int {

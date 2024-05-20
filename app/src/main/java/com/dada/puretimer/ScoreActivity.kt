@@ -9,6 +9,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +31,16 @@ class ScoreActivity : AppCompatActivity() {
     // 오프라인에서도 데이터저장 가능하게 함
     private fun enablePersistence() {
         Firebase.database.setPersistenceEnabled(true)
+    }
+
+    private fun addOnBackPressedCallback() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+
+            }
+        }
+
+        this.onBackPressedDispatcher.addCallback(this, callback)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -68,14 +79,15 @@ class ScoreActivity : AppCompatActivity() {
             var totalTime = 0
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 val sub = dataSnapshot.child("sub").getValue(String::class.java)
-                val time = dataSnapshot.child("time").getValue(String::class.java)
+                val time = dataSnapshot.child("timeTotal").getValue(String::class.java)
                 if (sub != null && time != null) {
                     val boardItem = BoardItem(sub, time)
                     itemList.add(boardItem)
                     val parts = time.split(":")
-                    val minutes = parts[0].toInt()
-                    val seconds = parts[1].toInt()
-                    totalTime += minutes * 60 + seconds
+                    val hours = parts[0].toInt()
+                    val minutes = parts[1].toInt()
+                    val seconds = parts[2].toInt()
+                    totalTime += hours * 3600 + minutes * 60 + seconds
                     binding.totalTime.text = formatTime(totalTime)
                     boardAdapter.notifyDataSetChanged() // 어댑터에 변경 알림
                 } else {
@@ -113,9 +125,11 @@ class ScoreActivity : AppCompatActivity() {
 
     }
     private fun formatTime(totalTimeInSeconds: Int): String {
-        val minutes = totalTimeInSeconds / 60
+        val hours = totalTimeInSeconds / 3600
+        val minutes = (totalTimeInSeconds % 3600) / 60
         val seconds = totalTimeInSeconds % 60
-        return String.format("%02d:%02d", minutes, seconds)
+
+        return String.format("%02d:%02d:%02d", hours,minutes, seconds)
     }
 
     private fun isNetworkAvailable(context: Context): Boolean {

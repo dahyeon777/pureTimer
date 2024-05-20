@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         sharedPref = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
         // 저장된 데이터를 로드합니다.
@@ -166,11 +167,12 @@ class MainActivity : AppCompatActivity() {
 
                                 if (existingSub == sub) {
                                     // 해당 sub의 시간을 00:00으로 초기화
-                                    userSnapshot.ref.child("time").setValue("00:00")
+                                    userSnapshot.ref.child("time").setValue("00:00:00")
                                     // 해당 과목(sub)을 데이터베이스에서 삭제
                                     userSnapshot.ref.removeValue()
                                     binding.subTextBtn.setText("과목을 변경하세요")
                                     subChange=0
+                                    time=0
                                     break
                                 }
                             }
@@ -188,10 +190,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.startButton.setOnClickListener {
-            if(subChange == 0){
-                Toast.makeText(this,"과목을 변경해주세요",Toast.LENGTH_SHORT).show()
-            }
-            else if (buttonPressCount == 0) {
+            if (subChange == 0) {
+                Toast.makeText(this, "과목을 변경해주세요", Toast.LENGTH_SHORT).show()
+            } else if (buttonPressCount == 0) {
                 startTimer()
                 binding.startButton.setText("STOP!")
                 buttonPressCount = 1 // 시작 상태로 변경
@@ -207,7 +208,6 @@ class MainActivity : AppCompatActivity() {
                     database.child("users").child(it1)
                 }
 
-                // ValueEventListener를 통해 데이터베이스의 변경사항을 감지하고 처리합니다.
                 if (myRef != null) {
                     myRef.addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -216,22 +216,26 @@ class MainActivity : AppCompatActivity() {
                                 val existingSub = userSnapshot.child("sub").getValue(String::class.java)
                                 if (existingSub == sub) {
                                     // 기존에 동일한 과목이 존재하면 해당 시간을 더합니다.
-                                    var existingTime = userSnapshot.child("time").getValue(String::class.java)
+                                    var existingTime = userSnapshot.child("timeTotal").getValue(String::class.java)
                                     val partsExisting = existingTime?.split(":")
-                                    val existingMinutes = partsExisting?.get(0)?.toInt()
-                                    val existingSeconds = partsExisting?.get(1)?.toInt()
+                                    val existingHours = partsExisting?.get(0)?.toInt()
+                                    val existingMinutes = partsExisting?.get(1)?.toInt()
+                                    val existingSeconds = partsExisting?.get(2)?.toInt()
 
                                     val partsNew = time.split(":")
-                                    val newMinutes = partsNew[0].toInt()
-                                    val newSeconds = partsNew[1].toInt()
+                                    val newHours = partsNew[0].toInt()
+                                    val newMinutes = partsNew[1].toInt()
+                                    val newSeconds = partsNew[2].toInt()
 
                                     // 시간을 더합니다.
+                                    val totalHours = existingHours?.plus(newHours)
                                     val totalMinutes = existingMinutes?.plus(newMinutes)
                                     val totalSeconds = existingSeconds?.plus(newSeconds)
-                                    existingTime = String.format("%02d:%02d", totalMinutes, totalSeconds)
+                                    existingTime = String.format("%02d:%02d:%02d", totalHours, totalMinutes, totalSeconds)
 
                                     // 데이터베이스에 수정된 시간을 업데이트합니다.
-                                    userSnapshot.ref.child("time").setValue(existingTime)
+                                    userSnapshot.ref.child("timeTotal").setValue(existingTime)
+                                    userSnapshot.ref.child("time").setValue("00:00:00")
                                     isSubExist = true
                                     break
                                 }
@@ -239,7 +243,7 @@ class MainActivity : AppCompatActivity() {
 
                             // 만약 해당 과목이 존재하지 않으면 새로 추가합니다.
                             if (!isSubExist) {
-                                val model = DataModel(sub, time)
+                                val model = DataModel(sub, time, timeTotal = time)
                                 myRef.push().setValue(model)
                             }
                         }
@@ -249,11 +253,14 @@ class MainActivity : AppCompatActivity() {
                         }
                     })
                 }
+                this.time =0
+                binding.timeView.setText("00:00:00")
             }
         }
 
-        binding.scoreButton.setOnClickListener {
 
+
+        binding.scoreButton.setOnClickListener {
             /*myRef.push().setValue(model)*/
             val intent = Intent(this, ScoreActivity::class.java)
             startActivity(intent)
@@ -263,25 +270,29 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun startTimer() {
+        time=0
         timerTask = timer(period = 9.99.toLong()) {
             time++
 
-            val hour = time / (60 * 100) // 분을 시로 변환
-            val minute = (time / 100) % 60 // 분
+            val hour = time / (60 * 60 * 100) // 시
+            val minute = (time / (60 * 100)) % 60 // 분을 구하고 시간 단위를 제외한 나머지 분
+            val second = (time / 100) % 60
 
             runOnUiThread {
-                binding.timeView?.text = String.format("%02d:%02d", hour, minute)
+                binding.timeView?.text = String.format("%02d:%02d:%02d", hour, minute, second)
             }
         }
     }
     private fun stopTimer() {
-        timerTask?.cancel()
+        timerTask?.cancel() // 타이머를 취소합니다.
+
     }
+
     private fun resetTimer(){
         timerTask?.cancel()
 
         time=0
-        binding.timeView?.text="00:00"
+        binding.timeView?.text="00:00:00"
     }
 
     fun showYesNoDialog(context: Context, message: String, onYesClicked: () -> Unit, onNoClicked: () -> Unit) {

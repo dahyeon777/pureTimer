@@ -28,7 +28,7 @@
             android:layout_height="150dp"
             android:fontFamily="@font/bmjua_ttf"
             android:gravity="center"
-            android:text="00:00"
+            android:text="00:00:00"
             android:textColor="@color/textColor"
             android:textSize="70sp"
             app:layout_constraintBottom_toBottomOf="@+id/view"
