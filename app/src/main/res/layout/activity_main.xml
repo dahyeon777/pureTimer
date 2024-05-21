@@ -124,7 +124,30 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="5dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints">
 
+            <Button
+                android:id="@+id/logoutBtn"
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:background="#FFFFFF"
+                android:fontFamily="@font/bmjua_ttf"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:text="로그아웃"
+                tools:layout_editor_absoluteX="87dp"
+                tools:layout_editor_absoluteY="10dp" />
+        </androidx.cardview.widget.CardView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

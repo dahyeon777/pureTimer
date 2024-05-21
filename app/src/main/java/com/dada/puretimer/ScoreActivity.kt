@@ -2,6 +2,7 @@ package com.dada.puretimer
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -15,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dada.puretimer.databinding.ActivityScoreBinding
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
@@ -27,6 +29,7 @@ class ScoreActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var databaseReference: DatabaseReference
+    private var mAuth: FirebaseAuth? = null
 
     // 오프라인에서도 데이터저장 가능하게 함
     private fun enablePersistence() {
@@ -59,9 +62,32 @@ class ScoreActivity : AppCompatActivity() {
         databaseReference = uid?.let { FirebaseDatabase.getInstance().reference.child(it) }!!
 
 
+
         binding.homeButton.setOnClickListener {
             val intent = Intent(this,MainActivity::class.java)
             startActivity(intent)
+        }
+
+        binding.allResetBtn.setOnClickListener {
+            mAuth = FirebaseAuth.getInstance()
+            val userId = mAuth!!.currentUser?.uid
+            if (userId != null) {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("모든 과목과 시간이 삭제됩니다.")
+                builder.setPositiveButton("예") { dialogInterface: DialogInterface, i: Int ->
+                    // 해당 유저의 데이터를 Realtime Database에서 삭제
+                    val database = FirebaseDatabase.getInstance()
+                    val userRef = database.getReference("users").child(uid)
+                    userRef.removeValue()
+                }
+
+                builder.setNegativeButton("아니요") { dialogInterface: DialogInterface, i: Int ->
+                    dialogInterface.dismiss()
+                }
+
+                builder.show()
+
+            }
         }
 
 
@@ -163,5 +189,6 @@ class ScoreActivity : AppCompatActivity() {
             .setCancelable(false)
             .show()
     }
+
 
 }
