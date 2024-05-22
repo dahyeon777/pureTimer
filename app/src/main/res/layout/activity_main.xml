@@ -98,7 +98,7 @@
 
             <Button
                 android:id="@+id/scoreButton"
-                android:layout_width="130dp"
+                android:layout_width="110dp"
                 android:layout_height="50dp"
                 android:background="#FFFFFF"
                 android:fontFamily="@font/bmjua_ttf"
@@ -138,13 +138,13 @@
 
             <Button
                 android:id="@+id/logoutBtn"
-                android:layout_width="130dp"
+                android:layout_width="110dp"
                 android:layout_height="50dp"
                 android:background="#FFFFFF"
                 android:fontFamily="@font/bmjua_ttf"
-                android:textSize="20sp"
                 android:gravity="center"
                 android:text="로그아웃"
+                android:textSize="20sp"
                 tools:layout_editor_absoluteX="87dp"
                 tools:layout_editor_absoluteY="10dp" />
         </androidx.cardview.widget.CardView>

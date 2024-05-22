@@ -31,24 +31,54 @@ class JoinActivity : AppCompatActivity() {
             val email = binding.joinEmailArea.text.toString()
             val password = binding.passwordEmailArea.text.toString()
             val passwordChack = binding.passwordCheckArea.text.toString()
+            var isGoToJoin = true
 
-            if (password == passwordChack) {
+            if (email.isEmpty()) {
+                Toast.makeText(this, "이메일을 입력해주세요", Toast.LENGTH_LONG).show()
+                isGoToJoin = false
+            } else if (!isValidEmail(email)) {
+            Toast.makeText(this, "이메일 형식을 확인해주세요", Toast.LENGTH_LONG).show()
+            isGoToJoin = false
+            }
+            else if (password.isEmpty()) {
+                Toast.makeText(this, "비밀번호를 입력해주세요", Toast.LENGTH_LONG).show()
+                isGoToJoin = false
+            }
+            else if(password.length < 6){
+                Toast.makeText(this, "비밀번호는 최소 6자 이상이어야 합니다", Toast.LENGTH_LONG).show()
+                isGoToJoin = false
+            }
+            else if (passwordChack.isEmpty()) {
+                Toast.makeText(this, "비밀번호를 확인해주세요", Toast.LENGTH_LONG).show()
+                isGoToJoin = false
+            }
+            else if(password != passwordChack){
+                Toast.makeText(this, "비밀번가 일치하지 않습니다.", Toast.LENGTH_LONG).show()
+                isGoToJoin = false
+            }
+            if (isGoToJoin) {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
                             Toast.makeText(this, "회원가입 성공!", Toast.LENGTH_LONG).show()
-                            startActivity(Intent(this, LoginActivity::class.java))
+                            val user = auth.currentUser
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.flags=Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
                         } else if (task.exception?.message.isNullOrEmpty()) {
                             Toast.makeText(this, "회원가입에 실패", Toast.LENGTH_LONG).show()
                         } else {
                             //입력한 계정 정보가 이미 Firebase DB에 있는 경우
-                            Toast.makeText(this, "계정이 이미 존재합니다.", Toast.LENGTH_LONG).show()
                         }
                     }
             } else {
-                Toast.makeText(this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    private fun isValidEmail(email: String): Boolean {
+        val emailRegex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})"
+        return emailRegex.toRegex().matches(email)
     }
 
 }

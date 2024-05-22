@@ -68,6 +68,11 @@ class ScoreActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        binding.joinCancleBtn.setOnClickListener {
+
+            showJoinoutDialog()
+        }
+
         binding.allResetBtn.setOnClickListener {
             mAuth = FirebaseAuth.getInstance()
             val userId = mAuth!!.currentUser?.uid
@@ -190,5 +195,33 @@ class ScoreActivity : AppCompatActivity() {
             .show()
     }
 
+    private fun showJoinoutDialog() {
+        val builder = AlertDialog.Builder(this)
 
+        builder.setMessage("탈퇴하시겠습니까?\n(기록과 회원정보가 모두 삭제됩니다.)")
+
+        builder.setPositiveButton("예") { dialogInterface: DialogInterface, i: Int ->
+
+            mAuth = FirebaseAuth.getInstance()
+            val userId = mAuth!!.currentUser?.uid
+            if (userId != null) {
+                // 해당 유저의 데이터를 Realtime Database에서 삭제
+                val database = FirebaseDatabase.getInstance()
+                val userRef = database.getReference("users").child(userId)
+                userRef.removeValue()
+
+                mAuth!!.currentUser?.delete()
+                Firebase.auth.signOut()
+            }
+            val intent = Intent(this, IntroActivity::class.java)
+            startActivity(intent)
+        }
+
+        builder.setNegativeButton("아니요") { dialogInterface: DialogInterface, i: Int ->
+            // 아무런 작업을 수행하지 않음
+        }
+
+        // 다이얼로그를 표시
+        builder.show()
+    }
 }
