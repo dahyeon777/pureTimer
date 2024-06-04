@@ -33,7 +33,7 @@
             android:id="@+id/hap"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:background="@drawable/shape"
+            android:background="@drawable/shape_top"
             android:gravity="center"
             android:text="\n\n오늘의 공부시간"
             android:textColor="@color/textColor"
