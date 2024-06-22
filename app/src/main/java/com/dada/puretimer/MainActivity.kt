@@ -193,11 +193,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "과목을 변경해주세요", Toast.LENGTH_SHORT).show()
             } else if (buttonPressCount == 0) {
                 startTimer()
-                binding.startButton.setText("STOP!")
+                binding.startButton.setText("STOP")
                 buttonPressCount = 1 // 시작 상태로 변경
             } else {
                 stopTimer()
-                binding.startButton.setText("START!")
+                binding.startButton.setText("START")
                 buttonPressCount = 0 // 정지 상태로 변경
 
                 val sub = binding.subTextBtn.text.toString()

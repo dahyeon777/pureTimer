@@ -2,143 +2,110 @@
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        tools:context=".ScoreActivity">
-
-
-        <Button
-            android:id="@+id/joinCancleBtn"
-            android:layout_width="110dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:background="@drawable/button_shape"
-            android:fontFamily="@font/bmjua_ttf"
-            android:gravity="center"
-            android:text="회원탈퇴"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_margin="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/hap" />
-
-        <TextView
-            android:id="@+id/hap"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/shape_top"
-            android:gravity="center"
-            android:text="\n\n오늘의 공부시간"
-            android:textColor="@color/textColor"
-            android:fontFamily="@font/bmjua_ttf"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="27dp" />
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:background="@drawable/shape_bottom"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="3"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints">
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.3"
-                android:fontFamily="@font/bmjua_ttf"
-                android:gravity="right"
-                android:text="Total time : "
-                android:textColor="@color/textColor"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/totalTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.7"
-                android:fontFamily="@font/bmjua_ttf"
-                android:gravity="left"
-                android:text="00:00"
-                android:textColor="@color/textColor"
-                android:textSize="28sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints">
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:background="@color/mainColor">
+
+            <Button
+                android:id="@+id/allResetBtn"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:background="#00ff0000"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/bmjua_ttf"
+                android:gravity="left|center_vertical"
+                android:text="초기화"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/homeButton"
                 android:layout_width="110dp"
                 android:layout_height="50dp"
-                android:background="#FFFFFF"
+                android:layout_weight="1"
+                android:layout_marginEnd="20dp"
+                android:background="#00ff0000"
                 android:fontFamily="@font/bmjua_ttf"
-                android:gravity="center"
+                android:gravity="right|center_vertical"
                 android:text="홈"
-                android:textColor="@color/textColor"
+                android:textColor="@color/white"
                 android:textSize="20sp" />
 
-        </androidx.cardview.widget.CardView>
+        </LinearLayout>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="15dp"
-            app:cardElevation="5dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="10dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:layout_weight="11">
 
-            <Button
-                android:id="@+id/allResetBtn"
-                android:layout_width="110dp"
-                android:layout_height="50dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="8"
+                android:layout_margin="20dp"
+                android:layout_marginTop="100dp"
+                android:padding = "10dp"/>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
                 android:background="@color/white"
-                android:fontFamily="@font/bmjua_ttf"
                 android:gravity="center"
-                android:text="초기화"
-                android:textColor="@color/textColor"
-                android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.cardview.widget.CardView>
+                android:orientation="horizontal"
+                android:weightSum="3">
 
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1.3"
+                    android:fontFamily="@font/bmjua_ttf"
+                    android:gravity="right"
+                    android:text="Total time : "
+                    android:textColor="@color/mainColor"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/totalTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_weight="1.7"
+                    android:fontFamily="@font/bmjua_ttf"
+                    android:gravity="left"
+                    android:text="00:00"
+                    android:textColor="@color/mainColor"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+            <Button
+                android:id="@+id/joinCancleBtn"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#00ff0000"
+                android:fontFamily="@font/bmjua_ttf"
+                android:gravity="left|center_vertical"
+                android:layout_marginLeft="20dp"
+                android:text="회원탈퇴"
+                android:textColor="#E3E3E3"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </LinearLayout>
 </layout>
