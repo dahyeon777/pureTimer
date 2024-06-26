@@ -1,2 +1,1 @@
-# pureTimer
-타이머 앱 개발 저장소입니다.
+<img src="https://github.com/dahyeon777/pureTimer/assets/168621121/13c93119-16e7-4044-a261-f00886008b70" alt="main">
